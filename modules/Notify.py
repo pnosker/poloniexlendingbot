@@ -4,6 +4,7 @@ import urllib2
 import json
 import smtplib
 
+
 # Slack post data needs to be encoded in UTF-8
 def encoded_dict(in_dict):
     out_dict = {}
@@ -76,16 +77,18 @@ def send_email(msg, email_login_address, email_login_password, email_smtp_server
         print("Could not send email, got error {0}".format(e))
         raise NotificationException(e)
 
+
 def post_to_pushbullet(msg, token, deviceid):
     post_data = {'body': msg, 'device_iden': deviceid, 'title': 'Poloniex Bot', 'type': 'note'}
     opener = urllib2.build_opener()
     req = urllib2.Request('https://api.pushbullet.com/v2/pushes', data=json.dumps(post_data),
                           headers={'Content-Type': 'application/json', 'Access-Token': token})
     try:
-        response = opener.open(req)
+        opener.open(req)
     except Exception as e:
         print("Could not send pushbullet, got error {0}".format(e))
         raise NotificationException(e)
+
 
 def send_notification(msg, notify_conf):
     nc = notify_conf
