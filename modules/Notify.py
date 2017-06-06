@@ -3,6 +3,8 @@ import urllib
 import urllib2
 import json
 import smtplib
+import socket
+import string
 
 
 # Slack post data needs to be encoded in UTF-8
@@ -88,6 +90,33 @@ def post_to_pushbullet(msg, token, deviceid):
     except Exception as e:
         print("Could not send pushbullet, got error {0}".format(e))
         raise NotificationException(e)
+
+
+def send_to_irc(msg, host, port, nick, ident, realname, channel):
+    """
+    Log into an IRC server and send a message to a channel.
+
+    This isn't particularly effecient as it logs in every time you want to send a message. Hence why it's wrapped in a
+    thread. It would be much better if the thread kept the connection open and it would be much faster. I'll maybe fix
+    that in a future PR.
+    """
+    readbuffer = ""
+    s = socket.socket()
+    s.connect((host, port))
+    s.send("NICK %s\r\n" % nick)
+    s.send("USER %s %s bla :%s\r\n" % (ident, host, realname))
+    message = "test"
+    s.send("JOIN {0}\r\n".format(channel))
+    s.send("PRIVMSG {0} :{1}\r\n".format(channel, message))
+    line = ""
+
+    while "JOIN {0}".format(channel) not in line:
+        readbuffer = readbuffer + s.recv(1024)
+        temp = string.split(readbuffer, "\n")
+        readbuffer = temp.pop()
+
+        for line in temp:
+            line = string.rstrip(line)
 
 
 def send_notification(msg, notify_conf):
