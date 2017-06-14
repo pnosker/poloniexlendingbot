@@ -118,14 +118,14 @@ If ``spreadlend = 1`` and ``gapbottom = 0``, it will behave as simple lending bo
 Variable loan Length
 --------------------
 
-These values allow you to lock in a better rate for a longer period of time, as per your configuration.
+These values allow you to lock in a better rate for a longer period of time, as per your configuration. There are up to 5 different cutoffs allowed.
 
-- ``xdaythreshold`` is the rate (in percent) where the bot will begin attempting to lend for a longer period of time.
+- ``vdaythreshold-zdaythreshold`` is the rate (in percent) where the bot will begin attempting to lend for a longer period of time. Use the lowest value for zdaythreshold and the highest for vdaythreshold.
 
     - Default value: 0.2 percent
     - Allowed range: 0 to 5 percent
 
-- ``xdays`` is the length(in days) of any loan whose rate exceeds the set xdaythreshold.
+- ``vdays-zdays`` is the length(in days) of any loan whose rate exceeds the set v-zdaythreshold. Use the lowest value for zdays and the highest value for vdays.
 
     - Default value: 60 days
     - Allowed range: 2 to 60 days
